@@ -1,5 +1,11 @@
 var uuid = require('uuid');
 var SAT = require('sat');
+var nim = require('./nimcache/test.js').nim;
+var botName = nim.botName;
+var callable = nim.callable;
+console.log(botName);
+callable();
+
 
 var BOT_DEFAULT_DIAMETER = 80;
 var BOT_DEFAULT_SPEED = 1;
@@ -47,7 +53,7 @@ BotManager.prototype.addBot = function (options) {
     id: botId,
     type: 'player',
     subtype: 'bot',
-    name: options.name || 'bot-' + Math.round(Math.random() * 10000),
+    name: options.name || botName + '-' + Math.round(Math.random() * 10000),
     score: options.score || 0,
     speed: options.speed == null ? this.botMoveSpeed : options.speed,
     mass: options.mass || this.botMass,
