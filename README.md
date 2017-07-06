@@ -1,5 +1,32 @@
-IOGrid
+Dot
 ======
+Dot is my learning [Nim](https://nim-lang.org/) project. The core idea is to use Nim's compile to javascipt feature and use [Phaser](http://phaser.io/) (graphics) and [SocketCluster](http://socketcluster.io/#!/) (server-client communication) to make a realtime, online game. I'm using [io-grid](https://github.com/jondubois/iogrid)'s example project as a base and its grid api for supporting huge worlds.
+
+The game itself will be something like [slither.io](http://slither.io/), where you can instantly join the game in a browser. That way, you can see someone playing and play with them right away. The concept of the game is fairly developed, but I have yet to write it down. It will appear here in the future.
+
+The roadmap for this project is
+1. (Current stage) Port io-grid, or at least the gameplay part, to Nim.
+2. Create a framework which allows the client and server side to share datastructures and files.
+3. Create a first playable version.
+4. Put the project on a site, so I can playtest it with people.
+5. Add planned features and iterate over the gameplay until it's fun.
+6. Create a proper site with a better presentation for the game, where I can put information, news/changelogs, and perhaps a forum.
+7. Get the word out there
+8. Either finish the project, endlessly work on it in my sad corner, or (hopefully) have it blow up in popularity.
+
+Simple running instructions:
+Clone the repo
+Follow the IO-grid instructions below
+
+Instructions for changing Nim code
+Clone the repo
+Install Nim (preferedly from github source)
+From the repo root folder, run "nim js test.nim" and "nim js -o:public/client.js client.nim"
+Follow the IO-grid instructions below
+
+
+--------
+IO-grid's readme
 
 [![Join the chat at https://gitter.im/SocketCluster/iogrid](https://badges.gitter.im/SocketCluster/iogrid.svg)](https://gitter.im/SocketCluster/iogrid?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -93,6 +120,6 @@ It's still very early for this project, here are some things that still need imp
 - The front end needs an overall cleanup; maybe we need to move the core logic outside of index.html into its own .js file... And maybe we can start using the import statement (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) to load dependencies?
 - We need to make a custom SocketCluster codec specifically for this game engine to compress all outgoing messages to be as small as possible. Right now it's just using a general-purpose binary compression codec for SC - We should add another codec layer on top of this.
 
-## License
+## License for IO-grid
 
 [MIT](LICENSE)
