@@ -1,10 +1,11 @@
 var uuid = require('uuid');
 var SAT = require('sat');
-var nim = require('./nimcache/test.js').nim;
-var botName = nim.botName;
-var callable = nim.callable;
-console.log(botName);
-callable();
+var nimTest = require('./nimcache/test.js');
+var botName = nimTest.botName;
+var callable = nimTest.callable;
+callable(botName)
+// console.log(botName);
+// callable();
 
 
 var BOT_DEFAULT_DIAMETER = 80;
