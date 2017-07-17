@@ -12,6 +12,21 @@ if (typeof Uint16Array === 'undefined') Uint16Array = Array;
 if (typeof Uint32Array === 'undefined') Uint32Array = Array;
 if (typeof Float32Array === 'undefined') Float32Array = Array;
 if (typeof Float64Array === 'undefined') Float64Array = Array;
+var NTI3408 = {size: 0, kind: 17, base: null, node: null, finalizer: null};
+var NTI140 = {size: 0,kind: 29,base: null,node: null,finalizer: null};
+var NTI64013 = {size: 0, kind: 17, base: null, node: null, finalizer: null};
+var NTI64015 = {size: 0, kind: 17, base: null, node: null, finalizer: null};
+var NNI64013 = {kind: 2, len: 4, offset: 0, typ: null, name: null, sons: [{kind: 1, offset: "left", len: 0, typ: NTI140, name: "left", sons: null}, 
+{kind: 1, offset: "right", len: 0, typ: NTI140, name: "right", sons: null}, 
+{kind: 1, offset: "up", len: 0, typ: NTI140, name: "up", sons: null}, 
+{kind: 1, offset: "down", len: 0, typ: NTI140, name: "down", sons: null}]};
+NTI64013.node = NNI64013;
+var NNI3408 = {kind: 2, len: 0, offset: 0, typ: null, name: null, sons: []};
+NTI3408.node = NNI3408;
+NTI64013.base = NTI3408;
+var NNI64015 = {kind: 1, offset: "youTextures", len: 0, typ: NTI64013, name: "youTextures", sons: null};
+NTI64015.node = NNI64015;
+NTI64015.base = NTI3408;
 var nimvm_5887 = false;
 var nim_program_result = 0;
 var globalRaiseHook_11405 = [null];
@@ -19,102 +34,127 @@ var localRaiseHook_11410 = [null];
 var outOfMemHook_11413 = [null];
 var objectID_48232 = [0];
 
-function inner_63012() {
-	var result_63014 = null;
+function inner_65012() {
+	var result_65014 = null;
 
 	var F={procname:"client.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
 	framePtr = F;
 	BeforeRet: do {
 		F.line = 402;
-		var a_63015 = null;
+		var a_65015 = null;
 		F.line = 403;
-		a_63015 = {};
+		a_65015 = {};
 		F.line = 415;
-		a_63015["codecEngine"] = scCodecMinBin;
+		a_65015["codecEngine"] = scCodecMinBin;
 		F.line = 422;
-		result_63014 = a_63015;
+		result_65014 = a_65015;
 		break BeforeRet;
 	} while (false);
 	framePtr = F.prev;
 
-	return result_63014;
+	return result_65014;
 
 }
-socketCluster.connect((inner_63012()));
+socketCluster.connect((inner_65012()));
 var game = null;
 
-function colonanonymous__63245() {
+function getConstants_64021() {
+	var result_64023 = {m_type: NTI64015, youTextures: {m_type: NTI64013, left: null, right: null, up: null, down: null}};
 
-		function inner_63253() {
-			var result_63255 = null;
-
-			var F={procname:":anonymous.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
-			framePtr = F;
-			BeforeRet: do {
-				F.line = 402;
-				var a_63256 = null;
-				F.line = 403;
-				a_63256 = {};
-				F.line = 422;
-				result_63255 = a_63256;
-				break BeforeRet;
-			} while (false);
-			framePtr = F.prev;
-
-			return result_63255;
-
-		}
-
-	var F={procname:"client.:anonymous",prev:framePtr,filename:"client.nim",line:0};
+	var F={procname:"clientGame.getConstants",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
-		F.line = 40;
-		var gameFunctions_63258 = inner_63253();
-		F.line = 41;
-		gameFunctions_63258.preload = preloadGame_63231;
-		F.line = 42;
-		gameFunctions_63258.create = createGame_63233;
-		F.line = 43;
-		gameFunctions_63258.render = renderGame_63235;
-		F.line = 44;
-		gameFunctions_63258.update = updateGame_63237;
-		F.line = 45;
-		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_63258);
+		F.line = 31;
+		result_64023.youTextures.left = "img/you-side-left.gif";
+		F.line = 32;
+		result_64023.youTextures.right = "img/you-side-right.gif";
+		F.line = 33;
+		result_64023.youTextures.up = "img/you-back.gif";
+		F.line = 34;
+		result_64023.youTextures.down = "img/you-front.gif";
 	framePtr = F.prev;
 
-	
-}
-window.onload = colonanonymous__63245;
+	return result_64023;
 
-function preloadGame_63231() {
-	var F={procname:"client.preloadGame",prev:framePtr,filename:"client.nim",line:0};
+}
+
+function preloadGame_64001() {
+	var F={procname:"clientGame.preloadGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
+		F.line = 6;
+		game.load.image("background", "img/background-texture.png");
 	framePtr = F.prev;
 
 	
 }
 
-function createGame_63233() {
-	var F={procname:"client.createGame",prev:framePtr,filename:"client.nim",line:0};
+function createGame_64003() {
+	var F={procname:"clientGame.createGame",prev:framePtr,filename:"clientGame.nim",line:0};
+	framePtr = F;
+		F.line = 10;
+		var background_64007 = game.add.tileSprite(0, 0, 4000, 4000, "background");
+	framePtr = F.prev;
+
+	
+}
+
+function renderGame_64008() {
+	var F={procname:"clientGame.renderGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
 	framePtr = F.prev;
 
 	
 }
 
-function renderGame_63235() {
-	var F={procname:"client.renderGame",prev:framePtr,filename:"client.nim",line:0};
+function updateGame_64010() {
+	var F={procname:"clientGame.updateGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
-	framePtr = F.prev;
-
-	
-}
-
-function updateGame_63237() {
-	var F={procname:"client.updateGame",prev:framePtr,filename:"client.nim",line:0};
-	framePtr = F;
-		F.line = 56;
+		F.line = 17;
 		console.log("Running");
 	framePtr = F.prev;
 
 	
 }
+
+function colonanonymous__65235() {
+
+		function inner_65244() {
+			var result_65246 = null;
+
+			var F={procname:":anonymous.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
+			framePtr = F;
+			BeforeRet: do {
+				F.line = 402;
+				var a_65247 = null;
+				F.line = 403;
+				a_65247 = {};
+				F.line = 422;
+				result_65246 = a_65247;
+				break BeforeRet;
+			} while (false);
+			framePtr = F.prev;
+
+			return result_65246;
+
+		}
+
+	var F={procname:"client.:anonymous",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 19;
+		var gameConstants_65237 = getConstants_64021();
+		F.line = 20;
+		var gameFunctions_65249 = inner_65244();
+		F.line = 21;
+		gameFunctions_65249.preload = preloadGame_64001;
+		F.line = 22;
+		gameFunctions_65249.create = createGame_64003;
+		F.line = 23;
+		gameFunctions_65249.render = renderGame_64008;
+		F.line = 24;
+		gameFunctions_65249.update = updateGame_64010;
+		F.line = 25;
+		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_65249);
+	framePtr = F.prev;
+
+	
+}
+window.onload = colonanonymous__65235;
