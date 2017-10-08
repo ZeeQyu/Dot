@@ -15,8 +15,8 @@ var options = {
   // If your system doesn't support 'uws', you can switch to 'ws' (which is slower but works on older systems).
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'uws',
   appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || null,
-  workerController: workerControllerPath || __dirname + '/server/worker.js',
-  brokerController: brokerControllerPath || __dirname + '/server/broker.js',
+  workerController: workerControllerPath || __dirname + '/worker.js',
+  brokerController: brokerControllerPath || __dirname + '/broker.js',
   initController: initControllerPath || null,
   socketChannelLimit: Number(process.env.SOCKETCLUSTER_SOCKET_CHANNEL_LIMIT) || 1000,
   clusterStateServerHost: argv.cssh || process.env.SCC_STATE_SERVER_HOST || null,
@@ -62,7 +62,7 @@ var start = function () {
     console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./]
+      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server/server.js', 'server/broker.js', /[\/\\]\./]
     });
   }
 };
