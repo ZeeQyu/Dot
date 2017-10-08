@@ -7,7 +7,7 @@ import ../shared/utility
 
 var socketCluster {.importc.} : JsObject
 var scCodecMinBin {.importc.} : JsObject
-socketCluster.connect(JsObject{"codecEngine": scCodecMinBin})
+# socketCluster.connect(JsObject{"codecEngine": scCodecMinBin})
 
 var window {.importc.} : JsObject
 var Phaser {.importc.} : JsObject
