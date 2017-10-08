@@ -17,3 +17,108 @@ var nim_program_result = 0;
 var globalRaiseHook_11605 = [null];
 var localRaiseHook_11610 = [null];
 var outOfMemHook_11613 = [null];
+var objectID_49232 = [0];
+
+function inner_66012() {
+	var result_66014 = null;
+
+	var F={procname:"client.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
+	framePtr = F;
+	BeforeRet: do {
+		F.line = 402;
+		var a_66015 = null;
+		F.line = 403;
+		a_66015 = {};
+		F.line = 415;
+		a_66015["codecEngine"] = scCodecMinBin;
+		F.line = 422;
+		result_66014 = a_66015;
+		break BeforeRet;
+	} while (false);
+	framePtr = F.prev;
+
+	return result_66014;
+
+}
+socketCluster.connect((inner_66012()));
+var game = null;
+
+function preloadGame_65001() {
+	var F={procname:"clientGame.preloadGame",prev:framePtr,filename:"clientGame.nim",line:0};
+	framePtr = F;
+		F.line = 6;
+		game.load.image("background", "img/background-texture.png");
+	framePtr = F.prev;
+
+	
+}
+
+function createGame_65003() {
+	var F={procname:"clientGame.createGame",prev:framePtr,filename:"clientGame.nim",line:0};
+	framePtr = F;
+		F.line = 10;
+		game.add.tileSprite(0, 0, 4000, 4000, "background");
+	framePtr = F.prev;
+
+	
+}
+
+function renderGame_65007() {
+	var F={procname:"clientGame.renderGame",prev:framePtr,filename:"clientGame.nim",line:0};
+	framePtr = F;
+	framePtr = F.prev;
+
+	
+}
+
+function updateGame_65009() {
+	var F={procname:"clientGame.updateGame",prev:framePtr,filename:"clientGame.nim",line:0};
+	framePtr = F;
+		F.line = 17;
+		console.log("Running");
+	framePtr = F.prev;
+
+	
+}
+
+function colonanonymous__66235() {
+
+		function inner_66243() {
+			var result_66245 = null;
+
+			var F={procname:":anonymous.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
+			framePtr = F;
+			BeforeRet: do {
+				F.line = 402;
+				var a_66246 = null;
+				F.line = 403;
+				a_66246 = {};
+				F.line = 422;
+				result_66245 = a_66246;
+				break BeforeRet;
+			} while (false);
+			framePtr = F.prev;
+
+			return result_66245;
+
+		}
+
+	var F={procname:"client.:anonymous",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 19;
+		var gameFunctions_66248 = inner_66243();
+		F.line = 20;
+		gameFunctions_66248.preload = preloadGame_65001;
+		F.line = 21;
+		gameFunctions_66248.create = createGame_65003;
+		F.line = 22;
+		gameFunctions_66248.render = renderGame_65007;
+		F.line = 23;
+		gameFunctions_66248.update = updateGame_65009;
+		F.line = 24;
+		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_66248);
+	framePtr = F.prev;
+
+	
+}
+window.onload = colonanonymous__66235;
