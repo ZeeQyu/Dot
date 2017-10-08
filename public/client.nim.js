@@ -20,27 +20,27 @@ var outOfMemHook_11613 = [null];
 var objectID_49232 = [0];
 var game = null;
 
-function preloadGame_65001() {
+function preloadGame_65003() {
 	var F={procname:"clientGame.preloadGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
-		F.line = 6;
-		game.load.image("background", "img/background-texture.png");
+		F.line = 9;
+		game.load.image(("background"), ("img/background-texture.png"));
 	framePtr = F.prev;
 
 	
 }
 
-function createGame_65003() {
+function createGame_65035() {
 	var F={procname:"clientGame.createGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
-		F.line = 10;
-		game.add.tileSprite(0, 0, 4000, 4000, "background");
+		F.line = 13;
+		game.add.tileSprite((0), (0), (4000), (4000), ("background"));
 	framePtr = F.prev;
 
 	
 }
 
-function renderGame_65007() {
+function renderGame_65090() {
 	var F={procname:"clientGame.renderGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
 	framePtr = F.prev;
@@ -48,21 +48,21 @@ function renderGame_65007() {
 	
 }
 
-function updateGame_65009() {
+function updateGame_65092() {
 	var F={procname:"clientGame.updateGame",prev:framePtr,filename:"clientGame.nim",line:0};
 	framePtr = F;
-		F.line = 17;
+		F.line = 19;
 		console.log("Running");
 	framePtr = F.prev;
 
 	
 }
 
-function throw_64057(errorText_64059) {
+function throw_64046(errorText_64048) {
 	var F={procname:"utility.throw",prev:framePtr,filename:"/home/zeeqyu/programming/Dot/nim/shared/utility.nim",line:0};
 	framePtr = F;
 		F.line = 20;
-		var error = errorText_64059;
+		var error = errorText_64048;
 		F.line = 21;
 		throw error;
 	framePtr = F.prev;
@@ -137,19 +137,19 @@ function colonanonymous__66061() {
 		F.line = 30;
 		var gameFunctions_66074 = inner_66069();
 		F.line = 31;
-		gameFunctions_66074.preload = preloadGame_65001;
+		gameFunctions_66074.preload = preloadGame_65003;
 		F.line = 32;
-		gameFunctions_66074.create = createGame_65003;
+		gameFunctions_66074.create = createGame_65035;
 		F.line = 33;
-		gameFunctions_66074.render = renderGame_65007;
+		gameFunctions_66074.render = renderGame_65090;
 		F.line = 34;
-		gameFunctions_66074.update = updateGame_65009;
+		gameFunctions_66074.update = updateGame_65092;
 		F.line = 35;
 		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_66074);
 		F.line = 37;
 		var socket_66168 = socketCluster.connect();
 		F.line = 38;
-		socket_66168.on(("error"), (throw_64057));
+		socket_66168.on(("error"), (throw_64046));
 		F.line = 39;
 		socket_66168.on(("connect"), (onConnect_66013));
 		F.line = 40;

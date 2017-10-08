@@ -12,9 +12,9 @@ proc createSprite*(textureName: cstring): JsObject =
 
 # var phaserGame* {.importc:"game".} : JsObject
 # var phaserGameAdd* {.importc:"game.add".} : JsObject
-proc phaserGameAddTileSprite*(x, y, width, height: int, texture: cstring) : JsObject {.importc:"game.add.tileSprite".}
+# proc phaserGameAddTileSprite*(x, y, width, height: int, texture: cstring) : JsObject {.importc:"game.add.tileSprite".}
 
-proc phaserLoadImage*(name, path: cstring) {.importc:"game.load.image".}
+# proc phaserLoadImage*(name, path: cstring) {.importc:"game.load.image".}
 
 proc throw*(errorText: cstring) =
   var error {.exportc.} = errorText
