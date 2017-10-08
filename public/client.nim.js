@@ -58,44 +58,110 @@ function updateGame_65009() {
 	
 }
 
-function colonanonymous__66013() {
+function throw_64057(errorText_64059) {
+	var F={procname:"utility.throw",prev:framePtr,filename:"/home/zeeqyu/programming/Dot/nim/shared/utility.nim",line:0};
+	framePtr = F;
+		F.line = 20;
+		var error = errorText_64059;
+		F.line = 21;
+		throw error;
+	framePtr = F.prev;
 
-		function inner_66021() {
-			var result_66023 = null;
+	
+}
+
+function onConnect_66013() {
+	var F={procname:"client.onConnect",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 18;
+		console.log("Connected");
+	framePtr = F.prev;
+
+	
+}
+
+function onRandomMessage_66041(data_66043) {
+	var F={procname:"client.onRandomMessage",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 27;
+		console.log(("Random stream: " + (data_66043.rand)));
+	framePtr = F.prev;
+
+	
+}
+
+function onSubscribeFail_66015(err_66017) {
+	var F={procname:"client.onSubscribeFail",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 21;
+		console.log(("Failed to subscrixbo to the channel due to error: " + (err_66017)));
+	framePtr = F.prev;
+
+	
+}
+
+function onSampleChannel_66028(num_66030) {
+	var F={procname:"client.onSampleChannel",prev:framePtr,filename:"client.nim",line:0};
+	framePtr = F;
+		F.line = 24;
+		console.log(("Sample channel message: " + (num_66030)));
+	framePtr = F.prev;
+
+	
+}
+
+function colonanonymous__66061() {
+
+		function inner_66069() {
+			var result_66071 = null;
 
 			var F={procname:":anonymous.inner",prev:framePtr,filename:"lib/js/jsffi.nim",line:0};
 			framePtr = F;
 			BeforeRet: do {
 				F.line = 402;
-				var a_66024 = null;
+				var a_66072 = null;
 				F.line = 403;
-				a_66024 = {};
+				a_66072 = {};
 				F.line = 422;
-				result_66023 = a_66024;
+				result_66071 = a_66072;
 				break BeforeRet;
 			} while (false);
 			framePtr = F.prev;
 
-			return result_66023;
+			return result_66071;
 
 		}
 
 	var F={procname:"client.:anonymous",prev:framePtr,filename:"client.nim",line:0};
 	framePtr = F;
-		F.line = 19;
-		var gameFunctions_66026 = inner_66021();
-		F.line = 20;
-		gameFunctions_66026.preload = preloadGame_65001;
-		F.line = 21;
-		gameFunctions_66026.create = createGame_65003;
-		F.line = 22;
-		gameFunctions_66026.render = renderGame_65007;
-		F.line = 23;
-		gameFunctions_66026.update = updateGame_65009;
-		F.line = 24;
-		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_66026);
+		F.line = 30;
+		var gameFunctions_66074 = inner_66069();
+		F.line = 31;
+		gameFunctions_66074.preload = preloadGame_65001;
+		F.line = 32;
+		gameFunctions_66074.create = createGame_65003;
+		F.line = 33;
+		gameFunctions_66074.render = renderGame_65007;
+		F.line = 34;
+		gameFunctions_66074.update = updateGame_65009;
+		F.line = 35;
+		game = new Phaser.Game("100", "100", Phaser.AUTO, "", gameFunctions_66074);
+		F.line = 37;
+		var socket_66168 = socketCluster.connect();
+		F.line = 38;
+		socket_66168.on(("error"), (throw_64057));
+		F.line = 39;
+		socket_66168.on(("connect"), (onConnect_66013));
+		F.line = 40;
+		socket_66168.on(("rand"), (onRandomMessage_66041));
+		F.line = 42;
+		var sampleChannel_66254 = socket_66168.subscribe(("sample"));
+		F.line = 43;
+		sampleChannel_66254.on(("subscribeFail"), (onSubscribeFail_66015));
+		F.line = 44;
+		sampleChannel_66254.watch((onSampleChannel_66028));
 	framePtr = F.prev;
 
 	
 }
-window.onload = colonanonymous__66013;
+window.onload = colonanonymous__66061;

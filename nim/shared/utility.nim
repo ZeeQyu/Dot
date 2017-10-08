@@ -15,3 +15,7 @@ proc createSprite*(textureName: cstring): JsObject =
 proc phaserGameAddTileSprite*(x, y, width, height: int, texture: cstring) : JsObject {.importc:"game.add.tileSprite".}
 
 proc phaserLoadImage*(name, path: cstring) {.importc:"game.load.image".}
+
+proc throw*(errorText: cstring) =
+  var error {.exportc.} = errorText
+  {.emit: "throw error;".}
