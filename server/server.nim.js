@@ -12,6 +12,63 @@ if (typeof Uint16Array === 'undefined') Uint16Array = Array;
 if (typeof Uint32Array === 'undefined') Uint32Array = Array;
 if (typeof Float32Array === 'undefined') Float32Array = Array;
 if (typeof Float64Array === 'undefined') Float64Array = Array;
+
+function toJSStr(s_23288) {
+		  if (s_23288 === null) return "";
+  var len = s_23288.length;
+  var asciiPart = new Array(len);
+  var fcc = String.fromCharCode;
+  var nonAsciiPart = null;
+  var nonAsciiOffset = 0;
+  for (var i = 0; i < len; ++i) {
+    if (nonAsciiPart !== null) {
+      var offset = (i - nonAsciiOffset) * 2;
+      var code = s_23288[i].toString(16);
+      if (code.length == 1) {
+        code = "0"+code;
+      }
+      nonAsciiPart[offset] = "%";
+      nonAsciiPart[offset + 1] = code;
+    }
+    else if (s_23288[i] < 128)
+      asciiPart[i] = fcc(s_23288[i]);
+    else {
+      asciiPart.length = i;
+      nonAsciiOffset = i;
+      nonAsciiPart = new Array((len - i) * 2);
+      --i;
+    }
+  }
+  asciiPart = asciiPart.join("");
+  return (nonAsciiPart === null) ?
+      asciiPart : asciiPart + decodeURIComponent(nonAsciiPart.join(""));
+  
+
+	
+}
+
+function rawEcho() {
+		      var buf = "";
+      for (var i = 0; i < arguments.length; ++i) {
+        buf += toJSStr(arguments[i]);
+      }
+      console.log(buf);
+    
+
+	
+}
+
+function makeNimstrLit(c_23254) {
+		  var ln = c_23254.length;
+  var result = new Array(ln);
+  for (var i = 0; i < ln; ++i) {
+    result[i] = c_23254.charCodeAt(i);
+  }
+  return result;
+  
+
+	
+}
 var nim_program_result = 0;
 var global_raise_hook_18618 = [null];
 var local_raise_hook_18623 = [null];
@@ -24,3 +81,17 @@ var out_of_mem_hook_18626 = [null];
       return (v - v % 1)   ||   (v < 0 ? -0 : v === 0 ? v : 0);
     };
   }
+var object_id_159237 = [0];
+var methods = {};
+
+function server_run_176033() {
+	var F={procname:"server.serverRun",prev:framePtr,filename:"server.nim",line:0};
+	framePtr = F;
+		F.line = 15;
+		rawEcho(makeNimstrLit("Running server"));
+	framePtr = F.prev;
+
+	
+}
+methods.serverRun = server_run_176033;
+exports.data = methods;

@@ -11,14 +11,14 @@ var scCodecMinBin {.importc.} : JsObject
 var window {.importc.} : JsObject
 var Phaser {.importc.} : JsObject
 
-proc PhaserGame() : JsObject {.varargs, importc:"new Phaser.Game".}
+proc newPhaserGame() : JsObject {.varargs, importc:"new Phaser.Game".}
 var game {.exportc.} : JsObject
 
 proc onConnect() =
   consoleLog("Connected")
 
 proc onSubscribeFail(err: JsObject) = 
-  consoleLog("Failed to subscrixbo to the channel due to error: " & err.to(cstring))
+  consoleLog("Failed to subscribe to the channel due to error: " & err.to(cstring))
 
 proc onSampleChannel(num: JsObject) =
   consoleLog("Sample channel message: " & num.to(cstring))
@@ -32,7 +32,7 @@ window.onload = proc() =
   gameFunctions.create = clientGame.createGame
   gameFunctions.render = clientGame.renderGame
   gameFunctions.update = clientGame.updateGame
-  game = PhaserGame("100", "100", Phaser.AUTO, "", gameFunctions)
+  game = newPhaserGame("100", "100", Phaser.AUTO, "", gameFunctions)
   
   var socket = socketCluster.connect()
   socket.on("error", utility.throw)

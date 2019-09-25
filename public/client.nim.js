@@ -100,7 +100,7 @@ function on_subscribe_fail_178075(err_178077) {
 	var F={procname:"client.onSubscribeFail",prev:framePtr,filename:"client.nim",line:0};
 	framePtr = F;
 		F.line = 21;
-		console.log(("Failed to subscrixbo to the channel due to error: " + (err_178077)));
+		console.log(("Failed to subscribe to the channel due to error: " + (err_178077)));
 	framePtr = F.prev;
 
 	

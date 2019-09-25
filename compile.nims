@@ -14,6 +14,6 @@ for path in listFiles("./nim/server"):
   echo command
   selfExec command
 
-let command = "node -v"
-echo command
-exec command
+# let command = "node server"
+# echo command
+# exec command

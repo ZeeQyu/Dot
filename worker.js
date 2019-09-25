@@ -4,6 +4,7 @@ var serveStatic = require('serve-static');
 var path = require('path');
 var morgan = require('morgan');
 var healthChecker = require('sc-framework-health-check');
+var nimServer = require('./server/server.nim.js')
 
 class Worker extends SCWorker {
   run() {
@@ -31,6 +32,8 @@ class Worker extends SCWorker {
      * NOTE: Be sure to replace the following sample logic with your own logic.
      */
 
+    // console.log(nimServer)
+    nimServer.data.serverRun()
     /**
     var count = 0;
     // Handle incoming websocket connections and listen for events.
