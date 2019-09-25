@@ -21,7 +21,8 @@
     "scc-broker-client": "^6.1.0",
     "serve-static": "1.13.2",
     "socketcluster": "^14.4.1",
-    "socketcluster-client": "^14.3.1"
+    "socketcluster-client": "^14.3.1",
+    "braces": ">=2.3.1"
   },
   "keywords": [
     "websocket",
