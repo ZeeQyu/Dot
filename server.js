@@ -1,38 +1,54 @@
-var fs = require('fs');
+/*
+  This is the SocketCluster master controller file.
+  It is responsible for bootstrapping the SocketCluster master process.
+  Be careful when modifying the options object below.
+  If you plan to run SCC on Kubernetes or another orchestrator at some point
+  in the future, avoid changing the environment variable names below as
+  each one has a specific meaning within the SC ecosystem.
+*/
+
+var path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
-var SocketCluster = require('socketcluster').SocketCluster;
 var scHotReboot = require('sc-hot-reboot');
+
+var fsUtil = require('socketcluster/fsutil');
+var waitForFile = fsUtil.waitForFile;
+
+var SocketCluster = require('socketcluster');
 
 var workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLER;
 var brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER;
-var initControllerPath = argv.ic || process.env.SOCKETCLUSTER_INIT_CONTROLLER;
+var workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER;
 var environment = process.env.ENV || 'dev';
 
 var options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
   brokers: Number(argv.b) || Number(process.env.SOCKETCLUSTER_BROKERS) || 1,
-  port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || Number(process.env.PORT) || 8000,
-  // If your system doesn't support 'uws', you can switch to 'ws' (which is slower but works on older systems).
-  wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'uws',
+  port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 8000,
+  // You can switch to 'sc-uws' for improved performance.
+  wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'ws',
   appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || null,
-  workerController: workerControllerPath || __dirname + '/worker.js',
-  brokerController: brokerControllerPath || __dirname + '/broker.js',
-  initController: initControllerPath || null,
+  workerController: workerControllerPath || path.join(__dirname, 'worker.js'),
+  brokerController: brokerControllerPath || path.join(__dirname, 'broker.js'),
+  workerClusterController: workerClusterControllerPath || null,
   socketChannelLimit: Number(process.env.SOCKETCLUSTER_SOCKET_CHANNEL_LIMIT) || 1000,
   clusterStateServerHost: argv.cssh || process.env.SCC_STATE_SERVER_HOST || null,
   clusterStateServerPort: process.env.SCC_STATE_SERVER_PORT || null,
+  clusterMappingEngine: process.env.SCC_MAPPING_ENGINE || null,
+  clusterClientPoolSize: process.env.SCC_CLIENT_POOL_SIZE || null,
   clusterAuthKey: process.env.SCC_AUTH_KEY || null,
+  clusterInstanceIp: process.env.SCC_INSTANCE_IP || null,
+  clusterInstanceIpFamily: process.env.SCC_INSTANCE_IP_FAMILY || null,
   clusterStateServerConnectTimeout: Number(process.env.SCC_STATE_SERVER_CONNECT_TIMEOUT) || null,
   clusterStateServerAckTimeout: Number(process.env.SCC_STATE_SERVER_ACK_TIMEOUT) || null,
   clusterStateServerReconnectRandomness: Number(process.env.SCC_STATE_SERVER_RECONNECT_RANDOMNESS) || null,
   crashWorkerOnError: argv['auto-reboot'] != false,
   // If using nodemon, set this to true, and make sure that environment is 'dev'.
   killMasterOnSignal: false,
-  instanceId: 'realm-1',
-  pubSubBatchDuration: null,
   environment: environment
 };
 
+var bootTimeout = Number(process.env.SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT) || 10000;
 var SOCKETCLUSTER_OPTIONS;
 
 if (process.env.SOCKETCLUSTER_OPTIONS) {
@@ -45,59 +61,45 @@ for (var i in SOCKETCLUSTER_OPTIONS) {
   }
 }
 
-var masterControllerPath = argv.mc || process.env.SOCKETCLUSTER_MASTER_CONTROLLER;
-
 var start = function () {
   var socketCluster = new SocketCluster(options);
 
-  if (masterControllerPath) {
-    var masterController = require(masterControllerPath);
-    masterController.run(socketCluster);
-  }
+  socketCluster.on(socketCluster.EVENT_WORKER_CLUSTER_START, function (workerClusterInfo) {
+    console.log('   >> WorkerCluster PID:', workerClusterInfo.pid);
+  });
 
-  if (environment == 'dev') {
+  if (socketCluster.options.environment === 'dev') {
     // This will cause SC workers to reboot when code changes anywhere in the app directory.
     // The second options argument here is passed directly to chokidar.
     // See https://github.com/paulmillr/chokidar#api for details.
     console.log(`   !! The sc-hot-reboot plugin is watching for code changes in the ${__dirname} directory`);
     scHotReboot.attach(socketCluster, {
       cwd: __dirname,
-      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server/server.js', 'server/broker.js', /[\/\\]\./]
+      ignored: ['public', 'node_modules', 'README.md', 'Dockerfile', 'server.js', 'broker.js', /[\/\\]\./, '*.log']
     });
   }
 };
 
 var bootCheckInterval = Number(process.env.SOCKETCLUSTER_BOOT_CHECK_INTERVAL) || 200;
+var bootStartTime = Date.now();
 
-if (workerControllerPath) {
-  // Detect when Docker volumes are ready.
-  var startWhenFileIsReady = (filePath) => {
-    return new Promise((resolve) => {
-      if (!filePath) {
-        resolve();
-        return;
-      }
-      var checkIsReady = () => {
-        fs.exists(filePath, (exists) => {
-          if (exists) {
-            resolve();
-          } else {
-            setTimeout(checkIsReady, bootCheckInterval);
-          }
-        });
-      };
-      checkIsReady();
-    });
-  };
-  var filesReadyPromises = [
-    startWhenFileIsReady(masterControllerPath),
-    startWhenFileIsReady(workerControllerPath),
-    startWhenFileIsReady(brokerControllerPath),
-    startWhenFileIsReady(initControllerPath)
-  ];
-  Promise.all(filesReadyPromises).then(() => {
-    start();
-  });
-} else {
+// Detect when Docker volumes are ready.
+var startWhenFileIsReady = (filePath) => {
+  var errorMessage = `Failed to locate a controller file at path ${filePath} before SOCKETCLUSTER_CONTROLLER_BOOT_TIMEOUT`;
+
+  return waitForFile(filePath, bootCheckInterval, bootStartTime, bootTimeout, errorMessage);
+};
+
+var filesReadyPromises = [
+  startWhenFileIsReady(workerControllerPath),
+  startWhenFileIsReady(brokerControllerPath),
+  startWhenFileIsReady(workerClusterControllerPath)
+];
+Promise.all(filesReadyPromises)
+.then(() => {
   start();
-}
+})
+.catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
